@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
+from flask import jsonify
 from book import Book 
 from user import User
 from db import cur, conn
@@ -196,9 +197,91 @@ def user_history():
 
     data = cur.fetchall()
 
-    return render_template("history.html", data=data)
+    return render_template("history.html", data=data) 
 
 
+
+@app.route("/api/login", methods=["POST"])
+def api_login():
+
+    data = request.get_json()
+
+    name = data.get("name")
+    ph = data.get("phone")
+
+    if not obj.validate_phone(ph):
+        return jsonify({"status": "error", "message": "Invalid phone"}), 400
+
+    if obj.login(name, ph):
+        return jsonify({"status": "success", "message": "Login successful"}), 200
+
+    return jsonify({"status": "fail", "message": "Invalid credentials"}), 401
+
+
+
+@app.route("/api/register", methods=["POST"])
+def api_register():
+
+    data = request.get_json()
+
+    name = data.get("name")
+    ph = data.get("phone")
+
+    msg = obj.register(name, ph)
+
+    return jsonify({"message": msg})
+
+
+@app.route("/api/books")
+def api_books():
+
+    cur.execute("SELECT book_name, quantity FROM book")
+    rows = cur.fetchall()
+
+    result = []
+
+    for b in rows:
+        result.append({
+            "book_name": b[0],
+            "status": "Available" if b[1] > 0 else "Out of Stock"
+        })
+
+    return jsonify(result)
+
+
+@app.route("/api/borrow", methods=["POST"])
+def api_borrow():
+
+    data = request.get_json()
+
+    name = data.get("name")
+    ph = data.get("phone")
+    book = data.get("book")
+    qty = int(data.get("qty", 0))
+    if not name or not ph or not book:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    book = book.title()
+
+    msg = obj.borrow(name, ph, book, qty)
+
+    return jsonify({"message": msg}), 200
+
+
+@app.route("/api/return", methods=["POST"])
+def api_return():
+
+    data = request.get_json()
+
+    name = data.get("name")
+    ph = data.get("phone")
+    book = data.get("book")
+    qty = int(data.get("qty", 0)) 
+    book = book.title()
+
+    msg = obj.return_book(name, ph, book, qty)
+
+    return jsonify({"message": msg})
 
 
 if __name__ == "__main__":
