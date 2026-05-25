@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<a href="/add_new" class="btn btn-success">Add New Book</a>
+<a href="/admin-history" class="btn btn-secondary">Transaction History</a>
+<a href="/logout" class="btn btn-danger">Logout</a>
+
+<br><br>
+
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th> 
+        <th>Name</th> 
+        <th>Author</th> 
+        <th>Qty</th> 
+        <th>Add</th> 
+        <th>Delete</th> 
+    </tr> 
+
+    {% for b in books %}
+    <tr>
+        <td>{{b[0]}}</td>
+        <td>{{b[1]}}</td>
+        <td>{{b[2]}}</td>
+        <td>{{b[3]}}</td> 
+        <td>
+            <form action="/add-qty/{{ b[0] }}" method="POST">
+                <input type="number" name="qty" required>
+                <button class="btn btn-success btn-sm">Add</button>
+            </form>
+        </td> 
+        <td>
+            <a href="/delete/{{ b[0] }}"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Are you sure you want to delete this book?')">
+            Delete </a>
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

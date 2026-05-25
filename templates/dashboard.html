@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+
+    <div class="card text-center p-4 shadow" style="width: 400px;">
+
+        <h3 class="mb-4">User Dashboard</h3>
+
+        <div class="d-grid gap-2">
+
+            <a href="/books" class="btn btn-primary">
+                 View Books
+            </a>
+
+            <a href="/borrow" class="btn btn-success">
+                 Borrow Book
+            </a>
+
+            <a href="/return-book" class="btn btn-warning">
+                 Return Book
+            </a>
+
+            <a href="/user-history" class="btn btn-info">
+                 Transaction History
+            </a>
+
+            <a href="/logout" class="btn btn-danger mt-3">
+                 Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="text-center text-white mb-4">Books Availability</h2>
+
+    <div class="d-flex justify-content-center">
+
+        <div class="card p-4 shadow" style="width: 500px;">
+
+            <table class="table table-bordered text-center">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Book Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for b in data %}
+                    <tr>
+                        <td>{{ b[0] }}</td>
+
+                        <td>
+                            {% if b[1] > 0 %}
+                                <span class="badge bg-success">Available ✅</span>
+                            {% else %}
+                                <span class="badge bg-danger">Out of Stock ❌</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+            <!-- ✅ Back Button -->
+            <a href="/dashboard" class="btn btn-dark mt-3">
+                ⬅ Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
